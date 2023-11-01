@@ -1,0 +1,44 @@
+
+
+input text{
+    color: white !important;
+}
+
+#typemetamask{
+    color: white !important;
+    width: 25px !important;
+    padding: 5px;
+}
+
+.mta{
+    color: white !important;
+}
+
+.ddp{
+    background-color: #10141E;
+}
+
+
+
+input,select  {
+    appearance: none;
+    background-color: #fff;
+    border-color: #6b7280;
+    border-width: 1px;
+    border-radius: 0px;
+    padding-top: 0.5rem;
+    padding-right: 0.75rem;
+    padding-bottom: 0.5rem;
+    padding-left: 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    --tw-shadow: 0 0 #0000;
+    width: 100%;
+}
+
+
+
+body {
+    min-height: 100% !important;
+    background-size: cover !important;
+}

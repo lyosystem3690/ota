@@ -1,0 +1,28 @@
+body{
+    background-color: #10141E;
+    font-family: 'Roboto', sans-serif;
+    font-size: 14px;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+input text{
+    color: white !important;
+}
+
+#typemetamask{
+    color: white !important;
+    width: 25px !important;
+    padding: 5px;
+}
+
+.mta{
+    color: white !important;
+}
+
+.ddp{
+    background-color: #10141E;
+}

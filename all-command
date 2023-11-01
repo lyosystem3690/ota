@@ -1,0 +1,19 @@
+
+
+truffle compile
+
+truffle test
+
+ // Ejecutar los contratos
+
+truffle migrate --reset 
+
+
+truffle exec scripts/issue_tokens.js
+
+ // Ejecutar en el contrato del testnet
+
+truffle migrate --reset  --network testnet 
+
+
+"start": "HTTPS=true SSL_CRT_FILE=/etc/letsencrypt/live/stake.1centdream.online/fullchain.pem SSL_KEY_FILE=/etc/letsencrypt/live/stake.1centdream.online/privkey.pem craco start",
