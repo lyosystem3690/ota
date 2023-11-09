@@ -53,7 +53,7 @@ const LoginOlvido = () => {
         <img
           src="logo.png"
           alt="Logo"
-          style={{ marginBottom: '16px', maxWidth: '100%' }}
+          style={{ marginBottom: '16px', maxWidth: '80%',marginLeft: '20px' }}
         />
       
         <Typography variant="h4" align="center" gutterBottom>

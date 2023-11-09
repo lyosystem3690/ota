@@ -1,4 +1,4 @@
-import React, { useState, useHistory } from 'react';
+import React, { useState, useEffect } from 'react';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 import {  FaIdCard, FaDoorClosed } from 'react-icons/fa';
 import ComponenteB from './ComponenteB'; // Importa ComponenteB
@@ -8,24 +8,24 @@ import ComponenteB from './ComponenteB'; // Importa ComponenteB
 const Dashboard = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [usuarios, setUsuarios] = useState([]);
+  const [observacion, setobservacion] = useState('');
+  const [mesyano, setMesyano] = useState('');
+  const [concepto_id, setConcepto] = useState('');
 
-  const [nombre, setNombre] = useState('');
-  const [siaf, setSiaf] = useState('');
-  const [fecha, setFecha] = useState('');
-  const [numeroComprobante, setNumeroComprobante] = useState('');
+  const handleInputChangeObservacion = (e) => {
+    setobservacion(e.target.value);
+  };
+
+  const handleInputChangeMesyano= (e) => {
+    setMesyano(e.target.value);
+  };
+
+  const handleInputChangeConcepto= (e) => {
+    setConcepto(e.target.value);
+  };
+
   
-  const handleInputChange = (e) => {
-    setNombre(e.target.value);
-  };
-
-  const handleInputChangeSiaf= (e) => {
-    setSiaf(e.target.value);
-  };
-
-  const handleInputChangeDate= (e) => {
-    setFecha(e.target.value);
-  };
-
 
   const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
@@ -41,12 +41,12 @@ const Dashboard = () => {
       console.log("hola");
   
       try {
-        const response = await fetch('http://localhost:5000/api/registro', {
+        const response = await fetch('http://localhost:5000/api/observacion', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ nombre, siaf, fecha, numeroComprobante  }),
+          body: JSON.stringify({ observacion, mesyano, concepto_id  }),
         });
   
         if (response.ok) {
@@ -56,7 +56,7 @@ const Dashboard = () => {
   
           // Redirecciona si la autenticación es exitosa
           //history.push('/dashboard'); // Redirecciona si la autenticación es exitosa la Autenticación , redirrecione a dashboard
-          window.location.href = '/listarnombre'; // Redirecciona si la autenticación es exitosa
+          window.location.href = '/listarobservacion'; // Redirecciona si la autenticación es exitosa
   
   
         } else {
@@ -69,15 +69,16 @@ const Dashboard = () => {
     };
 
 
- const handleChange = (e) => {
-    const inputValue = e.target.value;
-
-    // Verificar si el valor ingresado es un número
-    if (/^\d*$/.test(inputValue)) {
-      setNumeroComprobante(inputValue);
-    }
-  };
   
+  useEffect(() => {
+    // Realizar la solicitud al servidor Node.js
+    fetch('http://localhost:5000/api/listarconceptos')
+      .then(response => response.json())
+      .then(data => setUsuarios(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
+
+
 
   return (
     <Container maxWidth="lg" style={{ paddingTop: '-2rem' }}>
@@ -86,25 +87,15 @@ const Dashboard = () => {
       <div style={{  width : '550px',  marginLeft : '25%', padding : '5px' }}>
       <form onSubmit={handleRegistro}>
       <Typography variant="h4" align="center" gutterBottom  style={{ color: 'black', padding : '15px', fontSize : '25px' }}>
-       <b>Registrar nombre</b>
+       <b>Registrar Observación</b>
         </Typography>
           <TextField
-            label="Ingresar nombre de registro"
+            label="Ingresar Observación"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={handleInputChange}
-            value={nombre}
-            required
-          />
-          <TextField
-            label="Ingresar Siaf"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            onChange={handleInputChangeSiaf}
-            type="text"
-            value={siaf}
+            onChange={handleInputChangeObservacion}
+            value={observacion}
             required
           />
            <TextField
@@ -112,21 +103,20 @@ const Dashboard = () => {
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={handleInputChangeDate}
+            onChange={handleInputChangeMesyano}
             type="date"
-            value={fecha}
+            value={mesyano}
             required
           />
-           <TextField
-            label="Ingresar Numero de Comprobante"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="text"
-	    onChange={handleChange}
-	    value={numeroComprobante}
-            required
-          />
+          <select  style={{  width : '540px', marginTop : '10px' }} name="concepto_id" onChange={handleInputChangeConcepto}  >
+           <option value=""> -- Selecciona el Concepto --</option>
+           {usuarios.map(usuario => {
+          // Convertir la fecha en un objeto Date
+
+          return (
+            <option value={usuario.ids}>{usuario.ccc}</option>
+            )})};
+          </select>
           <Button
             type="submit"
             variant="contained"

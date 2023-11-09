@@ -1,4 +1,4 @@
-import React, { useState, useHistory } from 'react';
+import React, { useState, useEffect  } from 'react';
 import { TextField, Button, Container, Box, Typography } from '@mui/material';
 import {  FaIdCard, FaDoorClosed } from 'react-icons/fa';
 import ComponenteB from './ComponenteB'; // Importa ComponenteB
@@ -8,26 +8,45 @@ import ComponenteB from './ComponenteB'; // Importa ComponenteB
 const Dashboard = () => {
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const [nombre, setNombre] = useState('');
-  const [siaf, setSiaf] = useState('');
-  const [fecha, setFecha] = useState('');
-  const [numeroComprobante, setNumeroComprobante] = useState('');
+  const [usuarios, setUsuarios] = useState([]);
+  const [descripcion, setDescripcion] = useState('');
+  const [clasificacion, setClasificacion] = useState('');
+  const [follio, setFollio] = useState('');
+  const [registro_id, setRegistro] = useState('');
   
+
   const handleInputChange = (e) => {
-    setNombre(e.target.value);
+    setDescripcion(e.target.value);
   };
 
   const handleInputChangeSiaf= (e) => {
-    setSiaf(e.target.value);
+    
+    let inputValue = e.target.value;
+
+    // Usamos una expresión regular para permitir solo números y puntos
+    const regex = /^[0-9.]+$/;
+    if (regex.test(inputValue)) {
+      setClasificacion(e.target.value);
+    }
+   
   };
 
-  const handleInputChangeDate= (e) => {
-    setFecha(e.target.value);
+  const handleInputChangeFollio= (e) => {
+    let inputValue = e.target.value;
+
+    // Limitar la longitud máxima a 3 caracteres
+    if (inputValue.length <= 3) {
+      setFollio(inputValue);
+    }
+
+
+  };
+
+  const handleInputChangeRegistro= (e) => {
+    setRegistro(e.target.value);
   };
 
 
-  const [email, setEmail] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
   
     const handleClick = () => {
@@ -41,22 +60,21 @@ const Dashboard = () => {
       console.log("hola");
   
       try {
-        const response = await fetch('http://localhost:5000/api/registro', {
+        const response = await fetch('http://localhost:5000/api/concepto', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({ nombre, siaf, fecha, numeroComprobante  }),
+          body: JSON.stringify({descripcion,clasificacion,follio,registro_id }),
         });
   
         if (response.ok) {
           console.log('Autenticación exitosa');
   
-          localStorage.setItem('usuario', email);
-  
+        
           // Redirecciona si la autenticación es exitosa
           //history.push('/dashboard'); // Redirecciona si la autenticación es exitosa la Autenticación , redirrecione a dashboard
-          window.location.href = '/listarnombre'; // Redirecciona si la autenticación es exitosa
+          window.location.href = '/listarconcepto'; // Redirecciona si la autenticación es exitosa
   
   
         } else {
@@ -69,15 +87,15 @@ const Dashboard = () => {
     };
 
 
- const handleChange = (e) => {
-    const inputValue = e.target.value;
 
-    // Verificar si el valor ingresado es un número
-    if (/^\d*$/.test(inputValue)) {
-      setNumeroComprobante(inputValue);
-    }
-  };
   
+  useEffect(() => {
+    // Realizar la solicitud al servidor Node.js
+    fetch('http://localhost:5000/api/listarnames')
+      .then(response => response.json())
+      .then(data => setUsuarios(data))
+      .catch(error => console.error('Error:', error));
+  }, []);
 
   return (
     <Container maxWidth="lg" style={{ paddingTop: '-2rem' }}>
@@ -86,47 +104,49 @@ const Dashboard = () => {
       <div style={{  width : '550px',  marginLeft : '25%', padding : '5px' }}>
       <form onSubmit={handleRegistro}>
       <Typography variant="h4" align="center" gutterBottom  style={{ color: 'black', padding : '15px', fontSize : '25px' }}>
-       <b>Registrar nombre</b>
+       <b>Registrar Concepto</b>
         </Typography>
           <TextField
-            label="Ingresar nombre de registro"
+            label="Ingresar la descripción"
             variant="outlined"
             fullWidth
             margin="normal"
             onChange={handleInputChange}
-            value={nombre}
+            value={descripcion}
             required
           />
+        
           <TextField
-            label="Ingresar Siaf"
+            label="Ingresar clasificación"
             variant="outlined"
             fullWidth
             margin="normal"
             onChange={handleInputChangeSiaf}
             type="text"
-            value={siaf}
+            value={clasificacion}
             required
           />
-           <TextField
-            label=""
+          <TextField
+            label="Ingresar Folio"
             variant="outlined"
             fullWidth
             margin="normal"
-            onChange={handleInputChangeDate}
-            type="date"
-            value={fecha}
+            maxlength="3"
+            onChange={handleInputChangeFollio}
+            type="number"
+            value={follio}
             required
           />
-           <TextField
-            label="Ingresar Numero de Comprobante"
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="text"
-	    onChange={handleChange}
-	    value={numeroComprobante}
-            required
-          />
+           <select  style={{  width : '540px', marginTop : '10px' }} name="registro_id"  onChange={handleInputChangeRegistro} >
+           <option value="">--Selecciona el Nombre--</option>
+           {usuarios.map(usuario => {
+          // Convertir la fecha en un objeto Date
+
+          return (
+            <option value={usuario.id}>{usuario.nombre}</option>
+            )})};
+          </select>
+           
           <Button
             type="submit"
             variant="contained"

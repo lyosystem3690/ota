@@ -34,6 +34,12 @@ const Home = () => {
       if (response.ok) {
         console.log('Autenticación exitosa');
 
+        localStorage.setItem('usuario', email);
+        if(email === 'admin'){
+            localStorage.setItem('admin', true);
+        }else{
+            localStorage.setItem('admin', false);
+        }   
         // Redirecciona si la autenticación es exitosa
         //history.push('/dashboard'); // Redirecciona si la autenticación es exitosa la Autenticación , redirrecione a dashboard
         window.location.href = '/dashboard'; // Redirecciona si la autenticación es exitosa
@@ -61,7 +67,7 @@ const Home = () => {
         <img
           src="logo.png"
           alt="Logo"
-          style={{ marginBottom: '16px', maxWidth: '100%' }}
+          style={{ marginBottom: '16px', maxWidth: '80%',marginLeft: '20px' }}
         />
       
         <Typography variant="h4" align="center" gutterBottom>
@@ -104,13 +110,6 @@ const Home = () => {
       }}
     />
            <div>
-     
-           
-   
-          
-           
-
- 
     </div>
           <Button
             type="submit"
